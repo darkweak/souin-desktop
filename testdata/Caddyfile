@@ -1,0 +1,44 @@
+{
+    debug
+    cache {
+        api {
+            souin
+        }
+
+        cdn {
+            strategy hard
+        }
+        ttl 3600s
+    }
+}
+
+(cors) {
+	@cors_preflight method OPTIONS
+
+	header {
+		Access-Control-Allow-Origin "{header.origin}"
+        Access-Control-Allow-Headers *
+	}
+
+	handle @cors_preflight {
+		header {
+			Access-Control-Allow-Methods "GET, PURGE, OPTIONS"
+		}
+		respond "" 204
+	}
+}
+
+:80 {
+	import cors {header.origin}
+
+    route {
+        cache
+        header {
+            Access-Control-Allow-Origin *
+            Access-Control-Allow-Methods *
+            Access-Control-Allow-Headers *
+        }
+
+        respond "Hello"
+    }
+}
